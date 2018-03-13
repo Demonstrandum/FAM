@@ -1,0 +1,14 @@
+    GOTO INCR
+    OUT &ACC
+    HALT 0
+
+INCR:
+    ADD 1 : &ACC
+    GOTO _BACK
+
+
+{{
+  _BACK works by jumping to just after the last GOTO
+  statement, or jumping to the last label that was passed
+  without GOTOing to it.
+}}

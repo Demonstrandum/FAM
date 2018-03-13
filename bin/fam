@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+require 'fam'
+
+$VERBOSE = false
+$CLOCK = Float::INFINITY
+
+file_names = ARGV.select { |file| file.include? '.fam'}
+lexed = FAM::Syntax::Lexer.lex file_names[-1]
+puts lexed if $VERBOSE
+puts
+
+parsed = FAM::Syntax::Parser.parse lexed.tokens
+AST = parsed.ast
+pp AST if $VERBOSE
+
+MEM = FAM::Machine::RAM.new '100B'
+CPU = FAM::Machine::CPU.new MEM
+
+puts
+CPU.run AST

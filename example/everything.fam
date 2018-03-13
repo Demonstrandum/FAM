@@ -1,0 +1,72 @@
+{{
+ENTRY:
+    STORE -0xf9 : @003  !! move -0xf9 to address 3
+    LOAD @003 : &ACC
+    GOTO HELL
+HELL:
+    HALT 0
+}}
+ENTRY:
+    STORE -0xF5 : @2
+    STORE @2 : @3
+    LOAD @2 : &ACC
+    LOAD  2 : &DAT
+    STORE &DAT : @5
+
+    DATA var          !! Initializes with a value of `0`
+    DATA var1 : 43    !! Initializes with a value of `43`
+    DATA var2 : @2
+    DATA var3 : &DAT
+    DATA var4 : var2
+
+    STORE 666 : var4
+    STORE var4 : var
+
+    DATA _15 : 0b1111
+    STORE _15 : @3
+    STORE &DAT : _15
+
+    STORE 0xA : @99
+    LOAD @99 : &ACC
+
+LOOP:  !! Countdown in address @99 from 0xA (10) to 0
+    SUB 1 : &ACC
+    STORE &ACC : @99
+
+    EQUAL 0 : &ACC
+        | GOTO ELSEWHERE
+        | GOTO LOOP
+
+ELSEWHERE:
+    {{ Parsing and execution of nested
+       conditional statements is supported }}
+    MORE &ACC : -0b0101
+        | EQUAL -0b1000 : &ACC
+            | SUB 1 : &ACC
+            | ADD 1 : &ACC
+        | LESS 100 : &ACC
+            | GOTO ELSEWHERE
+            | EQUAL &ACC : 0
+                | GOTO ELSEWHERE
+                | GOTO END        !! Triple nested
+    {{ A terrible example, which doesn't do much... }}
+
+    LOAD 259 : &DAT
+    MOD 256 : &DAT    !! Expect 3
+
+    EQUAL 3 : &DAT
+      | GOTO IO
+      | GOTO END
+
+    LOAD 1766 : &ACC  !! This will only run after the _BACK is gone to.
+    GOTO END
+    
+IO:
+    IN &DAT
+    MOD 256 : &DAT
+    OUT &DAT
+    ASCII &DAT
+
+    GOTO _BACK  !! Goes to whatever was after the last GOTO or label passed.
+
+END: HALT 0
