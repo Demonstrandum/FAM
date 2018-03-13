@@ -4,12 +4,14 @@ require_relative '../syntax/ast'
 module FAM::Machine
   class CPU
     include FAM::Syntax
+    attr_reader :ram, :registers, :memory_aliases, :labels
 
     def initialize ram
       @ram = ram
       @registers = {
         :ACC => 0,
-        :DAT => 0
+        :DAT => 0,
+        :PC  => 0
       }
       @memory_aliases = Hash.new
 
@@ -18,13 +20,18 @@ module FAM::Machine
       @back_index = 0
     end
 
-    def self.quick_run ram, parsed
+    def self.quick_run ram, parsed, &block
       cpu = self.new ram
-      cpu.execute parsed
+      if block_given?
+        cpu.run parsed, &block
+      else
+        cpu.run parsed
+      end
       cpu
     end
 
-    def run parsed
+    def run parsed, &block
+      @block = block if block_given?
       @parsed = parsed
 
       @tree_index = -1
@@ -42,6 +49,8 @@ module FAM::Machine
     end
 
     def execute node
+      @registers[:PC] = @tree_index
+      @block.call @registers[:PC] unless @block.nil?
       case node
       when AST::LabelNode
         @last_jump = node.label

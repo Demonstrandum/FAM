@@ -24,7 +24,7 @@ module FAM::Syntax
         puts "Parsed to: (#{node.nil? ? 'NOT PARSED'.red : node.to_s.gray})" if $VERBOSE
         @ast << node unless node.nil?
         @tokens.next
-        puts
+        puts if $VERBOSE
       end
     end
 

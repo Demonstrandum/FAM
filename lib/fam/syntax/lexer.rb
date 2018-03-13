@@ -16,7 +16,7 @@ module FAM::Syntax
     end
 
     def lexer
-      puts "Lexing..."
+      puts "Lexing..." if $VERBOSE
       @raw = File.read @file_name
       @raw << EOF unless @raw[-1] == EOF
 

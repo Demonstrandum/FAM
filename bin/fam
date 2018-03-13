@@ -3,12 +3,12 @@
 require 'fam'
 
 $VERBOSE = false
-$CLOCK = Float::INFINITY
+$CLOCK = $VERBOSE ? 20 : Float::INFINITY
 
 file_names = ARGV.select { |file| file.include? '.fam'}
 lexed = FAM::Syntax::Lexer.lex file_names[-1]
 puts lexed if $VERBOSE
-puts
+puts if $VERBOSE
 
 parsed = FAM::Syntax::Parser.parse lexed.tokens
 AST = parsed.ast
@@ -16,6 +16,8 @@ pp AST if $VERBOSE
 
 MEM = FAM::Machine::RAM.new '100B'
 CPU = FAM::Machine::CPU.new MEM
+puts if $VERBOSE
 
-puts
-CPU.run AST
+CPU.run AST do |pc|
+  puts "Program counter: #{pc}" if $VERBOSE
+end
