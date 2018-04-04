@@ -67,7 +67,7 @@ module FAM::Syntax
     TYPES = [
       :OPCODE,
       :OPERAND,
-      :NUMERTIC,
+      :NUMERIC,
       :REGISTER,
       :ADDRESS,
       :LABEL,
