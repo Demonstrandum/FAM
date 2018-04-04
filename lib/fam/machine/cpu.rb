@@ -5,6 +5,8 @@ module FAM::Machine
   class CPU
     include FAM::Syntax
     attr_reader :ram, :registers, :memory_aliases, :labels
+    attr_reader :inputting, :outputting, :halted
+    attr_reader :output
 
     def initialize ram
       @ram = ram
@@ -18,6 +20,10 @@ module FAM::Machine
       @labels = Hash.new
       @last_jump = nil
       @back_index = 0
+      @tree_index = -1
+      @halted = false
+      @outputting = @inputting = false
+      @output = String.new
     end
 
     def self.quick_run ram, parsed, &block
@@ -34,7 +40,6 @@ module FAM::Machine
       @block = block if block_given?
       @parsed = parsed
 
-      @tree_index = -1
       while @tree_index < parsed.tree.size
         @tree_index += 1
 
@@ -48,7 +53,21 @@ module FAM::Machine
       end
     end
 
+    def step parsed
+      @parsed = parsed
+      return {:state => 'done'} if @tree_index >= parsed.tree.size || @halted
+      @tree_index += 1
+      node = parsed[@tree_index]
+      status = execute node
+      if status == :STOP
+        @halted = true
+        return {:state => 'done'}
+      end
+      {:state => 'running', :input => @inputting, :output => @outputting}
+    end
+
     def execute node
+      @outputting = @inputting = false
       @registers[:PC] = @tree_index
       @block.call @registers[:PC] unless @block.nil?
       case node
@@ -98,8 +117,9 @@ module FAM::Machine
       when AST::InNode
         @registers[node.register.register.to_sym] = cpu_input
       when AST::OutNode, AST::AsciiNode
+        @outputting = true
         value = get_value node, node.value
-        cpu_output value, (node.base_name == 'OutNode' ? :PLAIN : :ASCII)
+        @output = cpu_output(value, (node.base_name == 'OutNode' ? :PLAIN : :ASCII))
       when AST::SubNode, AST::AddNode, AST::MulNode, AST::DivNode, AST::ModNode
         value = get_value node, node.value
         ExpectedNode 'REGISTER', node.to unless node.to.base_name == 'RegisterNode'
@@ -143,7 +163,8 @@ module FAM::Machine
     end
 
     def cpu_output out, ascii=:PLAIN  # Ment to be changed
-      puts "OUTPUT: #{ascii != :PLAIN ? out.chr : out }"
+      show = ascii == :PLAIN ? out.to_s : out.chr
+      puts "OUTPUT: #{show}"
     end
 
     private def get_value super_value, value_node
@@ -161,12 +182,12 @@ module FAM::Machine
       end
     end
 
-    private def UnexpectedNode node, sub_node
+    def UnexpectedNode node, sub_node
       print "\n" * (@ram.to_s.count("\n") + 1) if $VERBOSE
       abort ("Unexpected Node, you've given `#{sub_node.base_name}` AST::to Node: `#{node.base_name}`?").red.bold
     end
 
-    private def ExpectedNode expect, got
+    def ExpectedNode expect, got
       print "\n" * (@ram.to_s.count("\n") + 1) if $VERBOSE
       abort ("Expected: `#{expect}`, but insted got: `#{got}`").red.bold
     end

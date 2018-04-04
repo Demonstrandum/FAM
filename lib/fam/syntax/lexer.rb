@@ -4,20 +4,19 @@ module FAM::Syntax
   class Lexer
     attr_reader :tokens
 
-    def initialize io_file
-      @file_name = io_file
+    def initialize string
+      @raw = string
       @tokens = TokenStream.new
     end
 
-    def self.lex io_file
-      obj = self.new io_file
+    def self.lex string
+      obj = self.new string
       obj.lexer
       obj
     end
 
     def lexer
       puts "Lexing..." if $VERBOSE
-      @raw = File.read @file_name
       @raw << EOF unless @raw[-1] == EOF
 
       loc = {:line => 1, :col => 1}

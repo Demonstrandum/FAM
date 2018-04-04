@@ -13,5 +13,5 @@ Gem::Specification.new do |s|
   s.files       = Dir.glob("{bin,lib}/**/*") + %w(LICENSE README.md DOC.md)
   s.require_path= 'lib'
   s.homepage    = 'https://github.com/Demonstrandum/FAM'
-  s.license     = 'GPL-3.0'
+  s.license     = 'GPL-2.0'
 end

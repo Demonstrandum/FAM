@@ -2,11 +2,11 @@
 
 require 'fam'
 
-$VERBOSE = false
+$VERBOSE = true
 $CLOCK = $VERBOSE ? 20 : Float::INFINITY
 
 file_names = ARGV.select { |file| file.include? '.fam'}
-lexed = FAM::Syntax::Lexer.lex file_names[-1]
+lexed = FAM::Syntax::Lexer.lex File.read file_names[-1]
 puts lexed if $VERBOSE
 puts if $VERBOSE
 
@@ -21,3 +21,13 @@ puts if $VERBOSE
 CPU.run AST do |pc|
   puts "Program counter: #{pc}" if $VERBOSE
 end
+
+
+#==== Shortened built in method: ====#
+
+#file_names = ARGV.select { |file| file.include? '.fam'}
+#FAM.run File.read(file_names[-1]), :allocate => '100B' do |ram, pc, registers|
+#  puts "RAM:\n#{ram}"
+#  puts "PC:  #{pc}"
+#  puts "REG: #{registers}"
+#end

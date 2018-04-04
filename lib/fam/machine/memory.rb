@@ -17,7 +17,7 @@ module FAM::Machine
       when Numeric
         alloc = size
       when String
-        suffix = size.upcase[/[A-Z]+/]
+        suffix = size.upcase[/[A-Z]+/] || ''
         suffix = 'kB' if suffix == 'KB'
         unless suffix.empty?
           alloc = size[/[0-9]+/].to_i * SIZES[suffix.to_sym]
@@ -37,6 +37,10 @@ module FAM::Machine
     def []=(i, value)
       abort 'ERROR: Only integers can be stored in memory!' unless i.class == Integer
       @array[i] = value
+    end
+
+    def to_a
+      @array
     end
 
     def to_s
