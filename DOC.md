@@ -9,7 +9,7 @@ The language consists mostly of labels, opcodes and operands.
 ### Identifiers
 Identifiers are just names for things, such as variables, labels, etc.
 
-They may consist of any number of underscores (`_`) anywhere in the name and any number of Latin alphabet letters. Numbers may only exist in Identifiers only if followed by letters or underscores.
+They may consist of any number of underscores (`_`) anywhere in the name and any number of Latin alphabet letters. Numbers may only exist in identifiers only if preceded by one or more letters or underscores.
 
 Identifiers have the following regular expression:
 
