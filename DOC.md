@@ -76,7 +76,7 @@ Some examples of numbers:
 ```
 
 ### Registers
-Registers in the language, are names for the registers in the CPU. Registers must start with an `&` followed my any combination of lower and uppercase Latin letters, and digits.
+Registers in the language, are names for the registers in the CPU. Registers must start with an `&` followed by any combination of lower and uppercase Latin letters, and digits.
 
 Regular expression: `&[a-zA-Z0-9]+`
 
