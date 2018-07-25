@@ -9,7 +9,7 @@ The language consists mostly of labels, opcodes and operands.
 ### Identifiers
 Identifiers are just names for things, such as variables, labels, etc.
 
-They may consist of any number of underscores (`_`) anywhere in the name and any number of Latin alphabet letters. Numbers may only exist in Identifiers only if followed by letters or underscores.
+They may consist of any number of underscores (`_`) anywhere in the name and any number of Latin alphabet letters. Numbers may only exist in identifiers only if preceded by one or more letters or underscores.
 
 Identifiers have the following regular expression:
 
@@ -49,7 +49,7 @@ e.g.
 ```
 
 ### Numerics
-Numerics must always start with wither a number, or a sign (`+`/`-`). Hexadecimal and duodecimal (binary) support also exists; this is achieved by prepending a `0x` (hexadecimal) or `0b` (binary) prefix to the number.
+Numerics must always start with either a number, or a sign (`+`/`-`). Hexadecimal and duodecimal (binary) support also exists; this is achieved by prepending a `0x` (hexadecimal) or `0b` (binary) prefix to the number.
 
 Normal base-10 numbers can have an `e` (scientific notation for 10 to the power of some number).
 
@@ -71,7 +71,7 @@ Some examples of numbers:
 -0xff4a   !! becomes -65354
 
 !! Binary
-0xb010110 !! becomes 184615184
+0b010110 !! becomes 184615184
 -0b101    !! becomes -5
 ```
 
