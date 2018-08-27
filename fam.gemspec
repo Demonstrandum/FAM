@@ -3,7 +3,7 @@ require_relative 'lib/fam'
 Gem::Specification.new do |s|
   s.name        = 'fam'
   s.version     = FAM::version
-  s.required_ruby_version = '>= 2.0.0'
+  s.required_ruby_version = '>= 2.5.1'
   s.executables << 'fam'
   s.date        = Time.now.to_s.split(/\s/)[0]
   s.summary     = "Fake Assembly(ish) Machine"

@@ -1,3 +1,4 @@
+require_relative 'ast'
 require_relative 'lexer'
 
 module FAM::Syntax

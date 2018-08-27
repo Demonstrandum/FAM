@@ -1,5 +1,5 @@
 require_relative 'memory'
-require_relative '../syntax/ast'
+require_relative '../syntax/parser'
 
 module FAM::Machine
   class CPU
