@@ -5,7 +5,9 @@ class Object
 end
 
 module FAM
-  VERSIONS = { :major => 0, :minor => 1, :tiny => 2 }
+  module Syntax; end
+
+  VERSIONS = { :major => 0, :minor => 1, :tiny => 3 }
 
   def self.version *args
     VERSIONS.values.join '.'
